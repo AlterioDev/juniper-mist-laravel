@@ -1,6 +1,6 @@
 # Juniper Mist API wrapper for Laravel
 
-This is a wrapper to easily make API calls to Juniper Mist.
+This is a wrapper to easily make API calls to Juniper Mist. Very basic and only one metric for now, but big plans to expand this package in the future.
 
 ## Prerequisites
 
