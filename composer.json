@@ -1,5 +1,6 @@
 {
     "name": "basduchambre/juniper-mist-laravel",
+    "type": "library",
     "description": "Juniper Mist API wrapper for Laravel",
     "license": "MIT",
     "authors": [
@@ -8,7 +9,9 @@
             "email": "bas@duchambre.media"
         }
     ],
-    "require": {},
+    "require": {
+        "php": ">7.0"
+    },
     "autoload": {
         "psr-4": {
             "Basduchambre\\JuniperMist\\": "src/"
