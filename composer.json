@@ -1,0 +1,24 @@
+{
+    "name": "basduchambre/juniper-mist-laravel",
+    "description": "Juniper Mist API wrapper for Laravel",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Bastiaan van de Kamer",
+            "email": "bas@duchambre.media"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Basduchambre\\JuniperMist\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Basduchambre\\JuniperMist\\JuniperMistServiceProvider"
+            ]
+        }
+    }
+}
