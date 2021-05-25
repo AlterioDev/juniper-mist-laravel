@@ -16,7 +16,7 @@ class JuniperMistServiceProvider extends ServiceProvider
 
     public function register()
     {
-        $this->app->singleton('JuniperMist', function($app) {
+        $this->app->bind('junipermist', function($app) {
             return new JuniperMist();
         });
     }

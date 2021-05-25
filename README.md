@@ -4,9 +4,9 @@ This is a wrapper to easily make API calls to Juniper Mist. Very basic and only 
 
 ## Prerequisites
 
--   Juniper Mist API key
--   Juniper Mist Site ID
--   Juniper Mist Map ID
+- Juniper Mist API key
+- Juniper Mist Site ID
+- Juniper Mist Map ID
 
 ## Installation
 
@@ -16,7 +16,7 @@ Install the package through composer
 composer require basduchambre/juniper-mist-laravel
 ```
 
-To publish the `junipermist.php` config file, run the following command
+To publish the `junipermist.php` config file, run the following command. Publishing will also make an Alias `JuniperMist`, so you don't have to import.
 
 ```
 php artisan vendor:publish --provider="Basduchambre\JuniperMist\JuniperMistServiceProvider"
@@ -39,22 +39,37 @@ To retreive data, create a custom `route` and `Controller`. An example is given 
 ```
 namespace App\Http\Controllers;
 
-use Basduchambre\JuniperMist\JuniperMist;
-
 class ExampleController extends Controller
 {
     public function mist()
     {
-        return JuniperMist::fetchData();
+        return JuniperMist::get();
     }
 }
 ```
 
+### Filter by SSID
+
+You can filter by SSID if you know the name. E.g.
+
+`return JuniperMist::ssid('my_wifi_network')->get();`
+
+### Chaining methods
+
+It is possible to chain different methods to alter the output like below;
+
+```
+return JuniperMist::metric('unconnected_clients')
+    ->ssid('my_wifi_network')
+    ->setSiteId('my_site_id')
+    ->setMapId('my_map_id')
+    ->get()
+```
+
 ## Roadmap
 
--   Choose metric to fetch
-    -   Dwelltime
-    -   Recurring visitors
-    -   Etc.
--   Filter by SSID
--   Filter by date
+- Choose metric to fetch
+  - Dwelltime
+  - Recurring visitors
+  - Etc.
+- Filter by date
