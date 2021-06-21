@@ -1,10 +1,9 @@
 <?php
-
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateMistFetchDataTable extends Migration
+class CreateJuniperMistFetchDataTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +12,7 @@ class CreateMistFetchDataTable extends Migration
      */
     public function up()
     {
-        Schema::create('mist_fetch_data', function (Blueprint $table) {
+        Schema::create('juniper_mist_fetch_data', function (Blueprint $table) {
             $table->id();
             $table->integer('location_id');
             $table->string('mac_address');
@@ -29,6 +28,6 @@ class CreateMistFetchDataTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('mist_fetch_data');
+        Schema::dropIfExists('juniper_mist_fetch_data');
     }
 }

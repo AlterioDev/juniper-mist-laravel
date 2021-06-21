@@ -1,16 +1,15 @@
 <?php
-
 namespace Basduchambre\JuniperMist;
 
-use Exception;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Http;
 use Basduchambre\JuniperMist\Exceptions\BadRequest;
-
+use Basduchambre\JuniperMist\Exceptions\InvalidApiToken;
+use Basduchambre\JuniperMist\Exceptions\MissingSiteOrMapId;
+use Exception;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
 
 class JuniperMist
 {
-
     private $url;
     private $api_key;
     private $site_id;
@@ -57,54 +56,44 @@ class JuniperMist
 
     public function get()
     {
-
-        if ($this->api_key == null || !Str::contains($this->api_key, 'Token ')) {
-            return response()->json([
-                'message' => "Mist API key missing or invalid token. Check if the token is set and starts with 'Token '."
-            ], 500);
+        if ($this->api_key == null || ! Str::contains($this->api_key, 'Token ')) {
+            throw new InvalidApiToken('API Token missing or invalid.');
         }
 
         if ($this->site_id == null || $this->map_id == null) {
-            return response()->json([
-                'message' => "Mist location id's are missing. Check if they are set"
-            ], 500);
+            throw new MissingSiteOrMapId('Mist location id\'s are missing. Check if they are set.');
         }
 
         $url = $this->url . '/' . $this->site_id . '/stats/maps/' . $this->map_id . '/' . $this->metric;
 
         try {
             $request = Http::withHeaders([
-                'Authorization' => $this->api_key
+                'Authorization' => $this->api_key,
             ])->get($url);
 
             if ($request->getStatusCode() != 200) {
-                return response()->json([
-                    'message' => "Mist API request failed. Check if your location ID's are correct"
-                ], $request->getStatusCode());
+                throw new BadRequest($request);
             }
 
             $request = json_decode($request, true);
 
             if ($this->metric == 'clients') {
-
                 if ($this->ssid) {
-
                     $filtered_output = [];
                     foreach ($request as $connection) {
                         if (Str::slug($connection['ssid']) === Str::slug($this->ssid)) {
                             $filtered_output[] = $connection;
                         }
                     }
+
                     return response($filtered_output);
                 } else {
                     return response($request);
                 }
-            } else if ($this->metric == 'unconnected_clients') {
-
+            } elseif ($this->metric == 'unconnected_clients') {
                 return response($request);
             }
         } catch (Exception $exception) {
-
             return $exception;
         }
     }

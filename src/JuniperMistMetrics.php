@@ -4,11 +4,10 @@ namespace Basduchambre\JuniperMist;
 
 use Exception;
 use Illuminate\Support\Facades\Http;
-
+use Illuminate\Support\Str;
 
 class JuniperMistMetrics
 {
-
     private $url;
     private $api_key;
     private $site_id;
@@ -63,16 +62,16 @@ class JuniperMistMetrics
 
     public function get()
     {
-        if ($this->api_key == null || !Str::contains($this->api_key, 'Token ')) {
+        if ($this->api_key == null || ! Str::contains($this->api_key, 'Token ')) {
             return response()->json([
-                'message' => "Mist API key missing or invalid token. Check if the token is set and starts with 'Token '."
+                'message' => "Mist API key missing or invalid token. Check if the token is set and starts with 'Token '.",
             ], 500);
         }
 
         if ($this->site_id == null || $this->map_id == null) {
             //return response("Mist location id's are missing. Check if they are set.");
             return response()->json([
-                'message' => "Mist location id's are missing. Check if they are set"
+                'message' => "Mist location id's are missing. Check if they are set",
             ], 500);
         }
 
@@ -80,12 +79,12 @@ class JuniperMistMetrics
 
         try {
             $request = Http::withHeaders([
-                'Authorization' => $this->api_key
+                'Authorization' => $this->api_key,
             ])->get($url);
 
             if ($request->getStatusCode() != 200) {
                 return response()->json([
-                    'message' => "Mist API request failed. Check if your location ID's are correct"
+                    'message' => "Mist API request failed. Check if your location ID's are correct",
                 ], $request->getStatusCode());
             }
 
@@ -93,7 +92,6 @@ class JuniperMistMetrics
 
             return response($request);
         } catch (Exception $exception) {
-
             return $exception;
         }
     }

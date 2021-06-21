@@ -1,10 +1,9 @@
 <?php
-
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateMistDataTable extends Migration
+class CreateJuniperMistDataTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +12,10 @@ class CreateMistDataTable extends Migration
      */
     public function up()
     {
-        Schema::create('mist_data', function (Blueprint $table) {
+        Schema::create('juniper_mist_data', function (Blueprint $table) {
             $table->id();
             $table->integer('location_id');
-            $table->string('timeframe');
+            $table->string('measured_period');
             $table->integer('unconnected_clients')->nullable();
             $table->integer('connected_clients')->nullable();
             $table->integer('recurring_clients')->nullable();
@@ -32,6 +31,6 @@ class CreateMistDataTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('mist_data');
+        Schema::dropIfExists('juniper_mist_data');
     }
 }
