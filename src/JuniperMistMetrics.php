@@ -2,12 +2,15 @@
 
 namespace Basduchambre\JuniperMist;
 
-use Exception;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Http;
+use Basduchambre\JuniperMist\Exceptions\FailedRequest;
+use Basduchambre\JuniperMist\Exceptions\InvalidApiToken;
+use Basduchambre\JuniperMist\Exceptions\MissingSiteOrMapId;
 
 class JuniperMistMetrics
 {
+
     private $url;
     private $api_key;
     private $site_id;
@@ -21,7 +24,7 @@ class JuniperMistMetrics
         $this->url = config('junipermist.base_url');
         $this->api_key = config('junipermist.api_key');
         $this->site_id = config('junipermist.location.site_id');
-        $this->metric = 'clients'; // Default value
+        $this->metric = 'loyalty'; // Default value
         $this->interval = 86400; // Default value
     }
 
@@ -62,37 +65,27 @@ class JuniperMistMetrics
 
     public function get()
     {
-        if ($this->api_key == null || ! Str::contains($this->api_key, 'Token ')) {
-            return response()->json([
-                'message' => "Mist API key missing or invalid token. Check if the token is set and starts with 'Token '.",
-            ], 500);
+        if ($this->api_key == null || !Str::contains($this->api_key, 'Token ')) {
+            throw new InvalidApiToken('Mist API token is missing or invalid. Check if the token is set and starts with "Token ".');
         }
 
-        if ($this->site_id == null || $this->map_id == null) {
-            //return response("Mist location id's are missing. Check if they are set.");
-            return response()->json([
-                'message' => "Mist location id's are missing. Check if they are set",
-            ], 500);
+        if ($this->site_id == null) {
+            throw new MissingSiteOrMapId('Mist site ID is missing. Check if it is set.');
         }
 
         $url = $this->url . '/' . $this->site_id . '/insights/client-' . $this->metric . '?start=' . $this->start . '&end=' . $this->end . '&interval=' . $this->interval;
 
-        try {
-            $request = Http::withHeaders([
-                'Authorization' => $this->api_key,
-            ])->get($url);
 
-            if ($request->getStatusCode() != 200) {
-                return response()->json([
-                    'message' => "Mist API request failed. Check if your location ID's are correct",
-                ], $request->getStatusCode());
-            }
+        $request = Http::withHeaders([
+            'Authorization' => $this->api_key
+        ])->get($url);
 
-            $request = json_decode($request, true);
-
-            return response($request);
-        } catch (Exception $exception) {
-            return $exception;
+        if ($request->getStatusCode() != 200) {
+            throw new FailedRequest('API request failed with status code ' . $request->getStatusCode() . '. Please check if your keys and metrics are correct');
         }
+
+        $request = json_decode($request, true);
+
+        return response($request);
     }
 }

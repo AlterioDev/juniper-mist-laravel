@@ -19,7 +19,7 @@ class JuniperMistServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind('junipermist', function () {
-            return new JuniperMist();
+            return new JuniperMistClients();
         });
     }
 }

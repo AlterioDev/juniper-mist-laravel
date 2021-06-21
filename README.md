@@ -1,6 +1,6 @@
 # Juniper Mist API wrapper for Laravel
 
-This is a wrapper to easily make API calls to Juniper Mist. Very basic and only one metric for now, but big plans to expand this package in the future.
+This is a wrapper to easily make API calls to Juniper Mist. Still basic and only some metrics for now, but big plans to expand this package in the future.
 
 ## Prerequisites
 
@@ -22,13 +22,13 @@ To publish the `junipermist.php` config file, run the following command. Publish
 php artisan vendor:publish --provider="Basduchambre\JuniperMist\JuniperMistServiceProvider"
 ```
 
-The Mist data tables will be created upon running the migration command
+The Mist data tables will be created upon running the migration command:
 
 ```
-php artisan migrate"
+php artisan migrate
 ```
 
-This will create the mist_fetch_data table and the mist_data table. 
+This will create two tables: mist_data to store the general metrics and mist_fetch_data to store temporary client data.
 
 Make sure your `.env` has the following values filled
 
@@ -56,23 +56,32 @@ class ExampleController extends Controller
 }
 ```
 
-### Filter by SSID
-
-You can filter by SSID if you know the name. E.g.
-
-`return JuniperMist::ssid('my_wifi_network')->get();`
-
 ### Chaining methods
 
-It is possible to chain different methods to alter the output like below;
+It is possible to chain different methods to alter the output like below:
 
 ```
-return JuniperMist::metric('unconnected_clients')
-    ->ssid('my_wifi_network')
+return JuniperMist::metric('clients')
     ->setSiteId('my_site_id')
     ->setMapId('my_map_id')
     ->get()
 ```
 
-## Roadmap
+### Live clients
 
+The JuniperMist class retrieves the live client data for connected and unconnected clients. The possible methods to alter the output for this class are the following:
+
+- type - the type of live client you want to retrieve (clients/unconnected_clients). Default is clients.
+- ssid - a specific ssid name to filter the output by
+- siteId - the site ID of the location you want to retrieve data from.
+- mapId - the map ID of the location you want to retrieve data from.
+
+### Client insight metrics
+
+The JuniperMistMetrics class retrieves the client insight metrics. The possible methods to alter the output for this class are the following:
+
+- metric - the type of metric you want to retrieve (loyalty/dwell/visit/zones). Default is loyalty.
+- start - The start time for the data you want to retrieve in a Unix timestamp.
+- end - The end time for the data you want to retrieve in a Unix timestamp.
+- interval - The intervals in which the data will be returned in seconds (86400/3600). Default is 86400.
+- siteId - the site ID of the location you want to retrieve data from.
