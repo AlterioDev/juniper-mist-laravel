@@ -16,11 +16,19 @@ Install the package through composer
 composer require basduchambre/juniper-mist-laravel
 ```
 
-To publish the `junipermist.php` config file, run the following command. Publishing will also make an Alias `JuniperMist`, so you don't have to import.
+To publish the `junipermist.php` config file, run the following command. Publishing will also make an Alias `JuniperMist`, so you don't have to import. 
 
 ```
 php artisan vendor:publish --provider="Basduchambre\JuniperMist\JuniperMistServiceProvider"
 ```
+
+The Mist data tables will be created upon running the migration command
+
+```
+php artisan migrate"
+```
+
+This will create the mist_fetch_data table and the mist_data table. 
 
 Make sure your `.env` has the following values filled
 
@@ -68,8 +76,3 @@ return JuniperMist::metric('unconnected_clients')
 
 ## Roadmap
 
-- Choose metric to fetch
-  - Dwelltime
-  - Recurring visitors
-  - Etc.
-- Filter by date

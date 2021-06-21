@@ -7,7 +7,7 @@ return [
     | Juniper Mist credentials & base url
     |--------------------------------------------------------------------------
     |
-    | Set your API credentials, can be found at https://manage.mist.com. 
+    | Set your API credentials, can be found at https://manage.mist.com.
     | The base url is set to the Juniper Mist default but can maybe change over time
     |
     */
@@ -29,8 +29,8 @@ return [
 
         'site_id' => env('JUNIPER_MIST_SITE_ID', ''),
 
-        'map_id' => env('JUNIPER_MIST_MAP_ID', '')
+        'map_id' => env('JUNIPER_MIST_MAP_ID', ''),
         
-    ]
+    ],
 
 ];
