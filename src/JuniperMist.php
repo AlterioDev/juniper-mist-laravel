@@ -56,11 +56,21 @@ class JuniperMist
     {
         $url = $this->url . '/' . $this->site_id . '/stats/maps/' . $this->map_id . '/' . $this->metric;
 
-        $response = Http::withHeaders([
+        $request = Http::withHeaders([
             'Authorization' => $this->api_key
         ])->get($url);
+
+        $request = json_decode($request, true);
+
+        $filtered_output = [];
+
+        foreach ($request as $connection) {
+            if ($connection['ssid'] === 'VLAN46-climatecontrol') {
+                $filtered_output[] = $connection;
+            }
+        }
        
-        return response($response);
+        return response($filtered_output);
     }
 
 }
